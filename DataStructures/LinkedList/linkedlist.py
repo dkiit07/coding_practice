@@ -142,6 +142,31 @@ class LinkedList:
                 num_nodes += 1
         return num_nodes
 
+    # Reverse a linked list
+    def reverse_list(self):
+        if self.head is None or self.head.next_node is None:
+            pass
+        else:
+            prev_node = self.head
+            temp_node = self.head.next_node
+            fwd_node = self.head.next_node.next_node
+
+            prev_node.next_node = None
+            while temp_node is not None:
+                temp_node.next_node = prev_node
+                prev_node = temp_node
+                temp_node = fwd_node
+                if temp_node is not None:
+                    fwd_node = temp_node.next_node
+            self.head = prev_node
+
+    # concatenate two linked lists
+    def concat_lists(self, head1, head2):
+        temp_node = head1
+        while temp_node.next_node is not None:
+            temp_node = temp_node.next_node
+        temp_node.next_node = head2
+
 
 
 def main():
@@ -183,6 +208,24 @@ def main():
     # count the number of nodes in the linked list
     num_nodes = ll.count_nodes()
     print('Total number of nodes in linked list: {}'.format(num_nodes))
+
+    # reverse a linked list
+    ll.reverse_list()
+    ll.print_list()
+
+    # create two lists and concat
+    ll1 = LinkedList()
+    for i in range(5):
+        ll1.insert_node_at_end(i)
+    ll1.print_list()
+
+    ll2 = LinkedList()
+    for i in range(5):
+        ll2.insert_node_at_end(i+10)
+    ll2.print_list()
+
+    ll1.concat_lists(ll1.head, ll2.head)
+    ll1.print_list()
 
 
 if __name__ == '__main__':
