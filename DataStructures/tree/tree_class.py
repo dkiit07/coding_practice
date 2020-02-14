@@ -31,10 +31,10 @@ class Tree:
 
         while i < len(node_list):
             temp_root = temp_list.pop(0)
-            if node_list[i] is not 'NaN':
+            if i < len(node_list) and node_list[i] is not 'NaN':
                 temp_root.left = Node(node_list[i])
                 temp_list.append(temp_root.left)
-            if node_list[i+1] is not 'NaN':
+            if (i+1) < len(node_list) and node_list[i+1] is not 'NaN':
                 temp_root.right = Node(node_list[i+1])
                 temp_list.append(temp_root.right)
             i += 2
