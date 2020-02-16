@@ -14,7 +14,8 @@ node_list = [1,2,3,4,'NaN','NaN','NaN','NaN',5]
 # node_list = [1,2,2,'NaN',3,3]
 # node_list = [1,2,2,3,4,4,3]
 # node_list = [1,2,2,'NaN',3,'NaN',3]
-
+# binary sum
+node_list = [1,0,1,0,1,0,0,0,1,'NaN',1,'NaN',0,'NaN',0,'NaN','NaN','NaN','NaN',0,'NaN',1,0,'NaN','NaN','NaN','NaN','NaN',1]
 
 ############################################################
 root = tree.generate_tree_from_list(node_list)
@@ -179,6 +180,47 @@ def lca_recursivee(root, n1, n2):
 
 
 ############################################################
+# 11. sum the root to leaf path binary
+def sum_root_to_leaf_binary(root):
+    sum = 0
+    path_list = all_paths_from_root_to_leaf(root)
+
+    for path in path_list:
+        i = 0
+        while i < len(path):
+            sum += path[-1-i] * 2**i
+            i += 1
+    return sum
+
+
+############################################################
+# 12. sum the root to leaf path binary - recursive
+def sum_root_to_leaf_binary_recursive(root):
+    sum = 0
+    if root is None:
+        return 0
+
+    def sum_paths(root, sum):
+        if root is None:
+            return 0
+        sum = sum * 2 + root.val
+
+        if root.left is None and root.right is None:
+            return sum
+
+        l_sum = sum_paths(root.left, sum)
+        r_sum = sum_paths(root.right, sum)
+
+        return l_sum + r_sum
+
+    sum = sum_paths(root, 0)
+    return sum
+
+
+
+
+
+############################################################
 def main():
     print('test')
     # inorder_traversal(root)
@@ -212,6 +254,13 @@ def main():
     # n2 = 3
     # lca = lca_recursivee(root, n1, n2)
     # print(lca.val)
+
+    # sum = sum_root_to_leaf_binary(root)
+    # print(sum)
+
+    # sum = sum_root_to_leaf_binary_recursive(root)
+    # print(sum)
+
 
 
 if __name__ == '__main__':
