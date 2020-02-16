@@ -15,7 +15,11 @@ node_list = [1,2,3,4,'NaN','NaN','NaN','NaN',5]
 # node_list = [1,2,2,3,4,4,3]
 # node_list = [1,2,2,'NaN',3,'NaN',3]
 # binary sum
-node_list = [1,0,1,0,1,0,0,0,1,'NaN',1,'NaN',0,'NaN',0,'NaN','NaN','NaN','NaN',0,'NaN',1,0,'NaN','NaN','NaN','NaN','NaN',1]
+# node_list = [1,0,1,0,1,0,0,0,1,'NaN',1,'NaN',0,'NaN',0,'NaN','NaN','NaN','NaN',0,'NaN',1,0,'NaN','NaN','NaN','NaN','NaN',1]
+# sum
+node_list = [1,2,3,4,6,'NaN','NaN','NaN',5]
+# sum path
+node_list = [1,2,3,4,6,'NaN',5,'NaN',5]
 
 ############################################################
 root = tree.generate_tree_from_list(node_list)
@@ -182,41 +186,111 @@ def lca_recursivee(root, n1, n2):
 ############################################################
 # 11. sum the root to leaf path binary
 def sum_root_to_leaf_binary(root):
-    sum = 0
+    path_sum = 0
     path_list = all_paths_from_root_to_leaf(root)
 
     for path in path_list:
         i = 0
         while i < len(path):
-            sum += path[-1-i] * 2**i
+            path_sum += path[-1-i] * 2**i
             i += 1
-    return sum
+    return path_sum
 
 
 ############################################################
 # 12. sum the root to leaf path binary - recursive
 def sum_root_to_leaf_binary_recursive(root):
-    sum = 0
+    path_sum = 0
     if root is None:
         return 0
 
-    def sum_paths(root, sum):
+    def sum_paths(root, path_sum):
         if root is None:
             return 0
-        sum = sum * 2 + root.val
+        path_sum = path_sum * 2 + root.val
 
         if root.left is None and root.right is None:
-            return sum
+            return path_sum
 
-        l_sum = sum_paths(root.left, sum)
-        r_sum = sum_paths(root.right, sum)
+        l_sum = sum_paths(root.left, path_sum)
+        r_sum = sum_paths(root.right, path_sum)
 
         return l_sum + r_sum
 
-    sum = sum_paths(root, 0)
-    return sum
+    path_sum = sum_paths(root, 0)
+    return path_sum
 
 
+############################################################
+# 13. sum the root to leaf path - recursive
+def sum_root_to_leaf_recursive(root):
+    path_sum = 0
+    if root is None:
+        return 0
+
+    def sum_paths(root, path_sum):
+        if root is None:
+            return 0
+        path_sum = path_sum * 10 + root.val
+
+        if root.left is None and root.right is None:
+            return path_sum
+
+        l_sum = sum_paths(root.left, path_sum)
+        r_sum = sum_paths(root.right, path_sum)
+
+        return l_sum + r_sum
+
+    path_sum = sum_paths(root, 0)
+    return path_sum
+
+
+############################################################
+# 14. path with given sum - recursive
+def given_sum_path(root, path_sum):
+    if root is None:
+        return None
+
+    def find_path(root, path_sum):
+        if root is None:
+            return False
+
+        path_sum = path_sum - root.val
+        if root.left is None and root.right is None and path_sum == 0:
+            return True
+
+        l_path = find_path(root.left, path_sum)
+        r_path = find_path(root.right, path_sum)
+
+        return l_path or r_path
+
+    is_path = find_path(root, path_sum)
+    return is_path
+
+
+############################################################
+# 15. path with given sum also return path - recursive
+def given_sum_path_with_path(root, path_sum):
+    if root is None:
+        return None
+    temp_path = []
+    path_list = []
+
+    def find_path(root, path_sum, temp_path, path_list):
+        if root is None:
+            return path_list
+
+        path_sum = path_sum - root.val
+        temp_path.append(root.val)
+        if root.left is None and root.right is None and path_sum == 0:
+            path_list.append(temp_path.copy())
+
+        find_path(root.left, path_sum, temp_path, path_list)
+        find_path(root.right, path_sum, temp_path, path_list)
+        temp_path.pop()
+
+    find_path(root, path_sum, temp_path, path_list)
+    return path_list
 
 
 
@@ -261,7 +335,14 @@ def main():
     # sum = sum_root_to_leaf_binary_recursive(root)
     # print(sum)
 
+    # sum = sum_root_to_leaf_recursive(root)
+    # print(sum)
 
+    # is_path = given_sum_path(root, 7)
+    # print(is_path)
+
+    path_list = given_sum_path_with_path(root, 9)
+    print(path_list)
 
 if __name__ == '__main__':
     main()
