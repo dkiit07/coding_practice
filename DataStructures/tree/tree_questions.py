@@ -11,13 +11,13 @@ node_list = ['A','B','K','C','H','L','O','D','G','I','J','M','N','NaN','NaN','E'
 # height balanced
 node_list = [1,2,3,4,'NaN','NaN','NaN','NaN',5]
 # symmetric
-# node_list = [1,2,2,'NaN',3,3]
+node_list = [1,2,2,'NaN',3,3]
 # node_list = [1,2,2,3,4,4,3]
 # node_list = [1,2,2,'NaN',3,'NaN',3]
 # binary sum
 # node_list = [1,0,1,0,1,0,0,0,1,'NaN',1,'NaN',0,'NaN',0,'NaN','NaN','NaN','NaN',0,'NaN',1,0,'NaN','NaN','NaN','NaN','NaN',1]
 # sum
-node_list = [1,2,3,4,6,'NaN','NaN','NaN',5]
+# node_list = [1,2,3,4,6,'NaN','NaN','NaN',5]
 # sum path
 node_list = [1,2,3,4,6,'NaN',5,'NaN',5]
 
@@ -96,6 +96,28 @@ def is_symmetric(root):
 
     if root.left is not None and root.right is not None :
         return check_left_right(root.left, root.right)
+
+
+############################################################
+# 6(a). if the tree is symmetric
+def is_symmetric_preorder(root):
+    preorder = []
+
+    def preorder_traversal(root, preorder):
+        if root is None:
+            return True
+        preorder_traversal(root.left, preorder)
+        preorder.append(root.val)
+        preorder_traversal(root.right, preorder)
+
+
+    preorder_traversal(root, preorder)
+    mid = int(len(preorder) / 2)
+    for i in range(mid):
+        if preorder[mid + i] != preorder[mid - i]:
+            return False
+    return True
+
 
 
 ############################################################
@@ -293,6 +315,28 @@ def given_sum_path_with_path(root, path_sum):
     return path_list
 
 
+############################################################
+# 16. Inorder traversal without recursion
+def inorder_non_recursive(root):
+    order_list = []
+    if root is None:
+        return order_list
+    stack_list = []
+    stack_list.append(root)
+
+    while len(stack_list) != 0:
+        if root.left:
+            stack_list.append(root)
+            root = root.left
+        else:
+            order_list.append(root.val)
+            if root.right:
+                root = root.right
+            else:
+                root = stack_list.pop()
+                root.left = None
+    return order_list
+
 
 ############################################################
 def main():
@@ -310,6 +354,9 @@ def main():
     # print(is_h_b)
 
     # is_sym = is_symmetric(root)
+    # print(is_sym)
+
+    # is_sym = is_symmetric_preorder(root)
     # print(is_sym)
 
     # path_list = all_paths_from_root_to_leaf(root)
@@ -341,8 +388,11 @@ def main():
     # is_path = given_sum_path(root, 7)
     # print(is_path)
 
-    path_list = given_sum_path_with_path(root, 9)
-    print(path_list)
+    # path_list = given_sum_path_with_path(root, 9)
+    # print(path_list)
+
+    in_list = inorder_non_recursive(root)
+    print(in_list)
 
 if __name__ == '__main__':
     main()
